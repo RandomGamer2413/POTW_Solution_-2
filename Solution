@@ -1,0 +1,52 @@
+import numpy as np
+
+def sorted_events(row):
+    return(row[1]-row[0])
+
+def maxNumOfEventsCanAttend(txtFile):
+    diffs = []
+    event_ranges = []
+    minim = []
+    maxim = []
+    
+    with open(txtFile, 'r') as eventsTxt:
+        for line in eventsTxt:
+            event_ranges.append(line.split(" "))
+    
+    event_ranges = event_ranges[1:]
+    
+    for element in event_ranges:
+        element[0] = int(element[0])
+        element[1] = int(element[1])
+        minim.append(element[0])
+        maxim.append(element[1])
+        diffs.append(element[1]-element[0])
+    
+    event_ranges.sort(key=sorted_events)
+    
+    minim.sort()
+    maxim.sort(reverse = True)
+    minim = minim[0]
+    maxim = maxim[0]
+    
+    rangeOfEvents = maxim-minim
+    
+    range_holder = np.array([])
+    chosen = []
+    true_range = np.array([])
+    counter = 0
+    
+    for i in event_ranges:
+        counter += (i[1]-i[0])
+        for j in list(range(i[0],i[1]+1)):
+            if j in true_range:
+                continue
+            elif j not in true_range and counter <= rangeOfEvents:
+                chosen.append(i)
+                true_range = np.append(range_holder, list(range(i[0],i[1]+1)))
+            else:
+                break
+    
+    return(chosen, f"These {len(chosen)} event(s) were chosen.")
+
+maxNumOfEventsCanAttend('greedy_algorithm.txt')
