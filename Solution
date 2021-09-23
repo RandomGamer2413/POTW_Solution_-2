@@ -48,5 +48,3 @@ def maxNumOfEventsCanAttend(txtFile):
                 break
     
     return(chosen, f"These {len(chosen)} event(s) were chosen.")
-
-maxNumOfEventsCanAttend('greedy_algorithm.txt')
