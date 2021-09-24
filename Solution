@@ -31,20 +31,51 @@ def maxNumOfEventsCanAttend(txtFile):
     
     rangeOfEvents = maxim-minim
     
-    range_holder = np.array([])
     chosen = []
-    true_range = np.array([])
+    true_range = [[]]
     counter = 0
+    previous_end = []
+    previous_start = []
     
     for i in event_ranges:
-        counter += (i[1]-i[0])
-        for j in list(range(i[0],i[1]+1)):
-            if j in true_range:
-                continue
-            elif j not in true_range and counter <= rangeOfEvents:
-                chosen.append(i)
-                true_range = np.append(range_holder, list(range(i[0],i[1]+1)))
-            else:
-                break
-    
+        counter_j = 0
+        true_true_range = np.array(true_range)
+        current_ranges = list(range(i[0],i[1]+1))
+        start = current_ranges[0]
+        end = current_ranges[len(current_ranges)-1]
+        if counter > rangeOfEvents:
+            break
+        if current_ranges in true_range and counter <= rangeOfEvents:
+            continue
+        elif start in np.hstack(true_true_range) and start in previous_end and end not in previous_end and start not in previous_start and end not in np.hstack(true_true_range) and len([x for x in set(list(range(start, end+1))) if x in set(np.hstack(true_true_range))]) == 1 and counter <= rangeOfEvents:
+            chosen.append(i)
+            true_range.append(current_ranges)
+            previous_start.append(i[0])
+            previous_end.append(i[1])
+            counter += (i[1]-i[0])
+            continue
+        elif end in np.hstack(true_true_range) and end in previous_start and start not in previous_start and end not in previous_end and start not in np.hstack(true_true_range) and len([x for x in set(list(range(start, end+1))) if x in set(np.hstack(true_true_range))]) == 1 and counter <= rangeOfEvents:
+            chosen.append(i)
+            true_range.append(current_ranges)
+            previous_start.append(i[0])
+            previous_end.append(i[1])
+            counter += (i[1]-i[0])
+            continue
+        else:
+            for j in current_ranges:
+                counter_j += 1
+                if j in np.hstack(true_true_range):
+                    break
+                elif j not in np.hstack(true_true_range) and counter <= rangeOfEvents and counter_j == len(current_ranges):
+                    true_range.append(current_ranges)
+                    chosen.append(i)
+                    previous_start.append(i[0])
+                    previous_end.append(i[1])
+                    counter += (i[1]-i[0])
+                    break
+                elif j not in np.hstack(true_true_range) and counter <= rangeOfEvents and counter_j < len(current_ranges):
+                    continue
+                else:
+                    break
+    print(event_ranges)
     return(chosen, f"These {len(chosen)} event(s) were chosen.")
