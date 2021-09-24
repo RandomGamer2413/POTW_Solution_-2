@@ -61,5 +61,5 @@ def maxNumOfEventsCanAttend1(txtFile):
                     continue
                 else:
                     break
-    print(event_ranges)
+    chosen.sort()
     return(chosen, f"These {len(chosen)} event(s) were chosen.")
