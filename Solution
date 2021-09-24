@@ -55,8 +55,6 @@ def maxNumOfEventsCanAttend1(txtFile):
                 elif j not in np.hstack(true_true_range) and counter <= rangeOfEvents and counter_j == len(current_ranges):
                     true_range.append(current_ranges)
                     chosen.append(i)
-                    previous_start.append(i[0])
-                    previous_end.append(i[1])
                     counter += (i[1]-i[0])
                     break
                 elif j not in np.hstack(true_true_range) and counter <= rangeOfEvents and counter_j < len(current_ranges):
